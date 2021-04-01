@@ -5,8 +5,6 @@
 -- Dumped from database version 13.2 (Debian 13.2-1.pgdg100+1)
 -- Dumped by pg_dump version 13.2 (Debian 13.2-1.pgdg100+1)
 
--- MAKE SURE TO CREATE A DATABASE CALLED frs WITH A USER OWNER NAMED postgres
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -146,10 +144,7 @@ CREATE TABLE public."Mission" (
     _rperm text[],
     _wperm text[],
     location point,
-    status text,
-    patients jsonb,
-    base_workers jsonb,
-    field_responders jsonb
+    status text
 );
 
 
@@ -313,6 +308,30 @@ CREATE TABLE public."_JobStatus" (
 ALTER TABLE public."_JobStatus" OWNER TO postgres;
 
 --
+-- Name: _Join:base_workers:Mission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."_Join:base_workers:Mission" (
+    "relatedId" character varying(120) NOT NULL,
+    "owningId" character varying(120) NOT NULL
+);
+
+
+ALTER TABLE public."_Join:base_workers:Mission" OWNER TO postgres;
+
+--
+-- Name: _Join:field_responders:Mission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."_Join:field_responders:Mission" (
+    "relatedId" character varying(120) NOT NULL,
+    "owningId" character varying(120) NOT NULL
+);
+
+
+ALTER TABLE public."_Join:field_responders:Mission" OWNER TO postgres;
+
+--
 -- Name: _Join:mission_record:MedicalData; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -323,6 +342,18 @@ CREATE TABLE public."_Join:mission_record:MedicalData" (
 
 
 ALTER TABLE public."_Join:mission_record:MedicalData" OWNER TO postgres;
+
+--
+-- Name: _Join:patients:Mission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."_Join:patients:Mission" (
+    "relatedId" character varying(120) NOT NULL,
+    "owningId" character varying(120) NOT NULL
+);
+
+
+ALTER TABLE public."_Join:patients:Mission" OWNER TO postgres;
 
 --
 -- Name: _Join:roles:_Role; Type: TABLE; Schema: public; Owner: postgres
@@ -482,7 +513,7 @@ COPY public."MedicalData" ("objectId", "createdAt", "updatedAt", _rperm, _wperm,
 -- Data for Name: Mission; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Mission" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, location, status, patients, base_workers, field_responders) FROM stdin;
+COPY public."Mission" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, location, status) FROM stdin;
 \.
 
 
@@ -559,10 +590,34 @@ COPY public."_JobStatus" ("objectId", "createdAt", "updatedAt", "jobName", sourc
 
 
 --
+-- Data for Name: _Join:base_workers:Mission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."_Join:base_workers:Mission" ("relatedId", "owningId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: _Join:field_responders:Mission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."_Join:field_responders:Mission" ("relatedId", "owningId") FROM stdin;
+\.
+
+
+--
 -- Data for Name: _Join:mission_record:MedicalData; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."_Join:mission_record:MedicalData" ("relatedId", "owningId") FROM stdin;
+\.
+
+
+--
+-- Data for Name: _Join:patients:Mission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."_Join:patients:Mission" ("relatedId", "owningId") FROM stdin;
 \.
 
 
@@ -613,7 +668,7 @@ _Role	{"fields": {"name": {"type": "String"}, "roles": {"type": "Relation", "tar
 _Session	{"fields": {"user": {"type": "Pointer", "targetClass": "_User"}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "expiresAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "restricted": {"type": "Boolean"}, "createdWith": {"type": "Object"}, "sessionToken": {"type": "String"}, "installationId": {"type": "String"}}, "className": "_Session"}	t
 MedicalData	{"fields": {"ACL": {"type": "ACL"}, "value": {"type": "String", "required": false}, "patient": {"type": "Pointer", "required": false, "targetClass": "Patient"}, "datatype": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "mission_record": {"type": "Relation", "required": false, "targetClass": "Mission"}}, "className": "MedicalData", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 _User	{"fields": {"email": {"type": "String"}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "status": {"type": "String", "required": false, "defaultValue": "online"}, "phoneNb": {"type": "String", "required": false}, "authData": {"type": "Object"}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "username": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "emailVerified": {"type": "Boolean"}, "_hashed_password": {"type": "String"}}, "className": "_User"}	t
-Mission	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "location": {"type": "GeoPoint", "required": false}, "objectId": {"type": "String"}, "patients": {"type": "Array", "required": false}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "base_workers": {"type": "Array", "required": false}, "field_responders": {"type": "Array", "required": false}}, "className": "Mission", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+Mission	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "location": {"type": "GeoPoint", "required": false}, "objectId": {"type": "String"}, "patients": {"type": "Relation", "required": false, "targetClass": "Patient"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "base_workers": {"type": "Relation", "required": false, "targetClass": "_User"}, "field_responders": {"type": "Relation", "required": false, "targetClass": "_User"}}, "className": "Mission", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 Patient	{"fields": {"dob": {"type": "Date", "required": false}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "gender": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "blood_type": {"type": "String", "required": false}, "home_address": {"type": "String", "required": false}}, "className": "Patient", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 MissionLog	{"fields": {"ACL": {"type": "ACL"}, "update": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "related_to_mission": {"type": "Pointer", "required": false, "targetClass": "MissionLog"}}, "className": "MissionLog", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 ChatMessage	{"fields": {"_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "sender": {"type": "Pointer", "required": false, "targetClass": "_User"}, "message": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "for_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "ChatMessage", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
@@ -731,11 +786,35 @@ ALTER TABLE ONLY public."_JobStatus"
 
 
 --
+-- Name: _Join:base_workers:Mission _Join:base_workers:Mission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."_Join:base_workers:Mission"
+    ADD CONSTRAINT "_Join:base_workers:Mission_pkey" PRIMARY KEY ("relatedId", "owningId");
+
+
+--
+-- Name: _Join:field_responders:Mission _Join:field_responders:Mission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."_Join:field_responders:Mission"
+    ADD CONSTRAINT "_Join:field_responders:Mission_pkey" PRIMARY KEY ("relatedId", "owningId");
+
+
+--
 -- Name: _Join:mission_record:MedicalData _Join:mission_record:MedicalData_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."_Join:mission_record:MedicalData"
     ADD CONSTRAINT "_Join:mission_record:MedicalData_pkey" PRIMARY KEY ("relatedId", "owningId");
+
+
+--
+-- Name: _Join:patients:Mission _Join:patients:Mission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."_Join:patients:Mission"
+    ADD CONSTRAINT "_Join:patients:Mission_pkey" PRIMARY KEY ("relatedId", "owningId");
 
 
 --

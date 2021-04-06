@@ -149,7 +149,8 @@ CREATE TABLE public."MedicalData" (
     _wperm text[],
     datatype text,
     value text,
-    patient text
+    patient text,
+    mission_record text
 );
 
 
@@ -209,6 +210,26 @@ CREATE TABLE public."Patient" (
 
 
 ALTER TABLE public."Patient" OWNER TO postgres;
+
+--
+-- Name: Worker; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Worker" (
+    "objectId" text NOT NULL,
+    "createdAt" timestamp with time zone,
+    "updatedAt" timestamp with time zone,
+    _rperm text[],
+    _wperm text[],
+    user_id text,
+    firstname text,
+    lastname text,
+    "phoneNb" text,
+    status text
+);
+
+
+ALTER TABLE public."Worker" OWNER TO postgres;
 
 --
 -- Name: _Audience; Type: TABLE; Schema: public; Owner: postgres
@@ -342,28 +363,16 @@ CREATE TABLE public."_Join:base_workers:Mission" (
 ALTER TABLE public."_Join:base_workers:Mission" OWNER TO postgres;
 
 --
--- Name: _Join:field_responders:Mission; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _Join:field_workers:Mission; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."_Join:field_responders:Mission" (
+CREATE TABLE public."_Join:field_workers:Mission" (
     "relatedId" character varying(120) NOT NULL,
     "owningId" character varying(120) NOT NULL
 );
 
 
-ALTER TABLE public."_Join:field_responders:Mission" OWNER TO postgres;
-
---
--- Name: _Join:mission_record:MedicalData; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."_Join:mission_record:MedicalData" (
-    "relatedId" character varying(120) NOT NULL,
-    "owningId" character varying(120) NOT NULL
-);
-
-
-ALTER TABLE public."_Join:mission_record:MedicalData" OWNER TO postgres;
+ALTER TABLE public."_Join:field_workers:Mission" OWNER TO postgres;
 
 --
 -- Name: _Join:patients:Mission; Type: TABLE; Schema: public; Owner: postgres
@@ -505,11 +514,7 @@ CREATE TABLE public."_User" (
     _perishable_token text,
     _perishable_token_expires_at timestamp with time zone,
     _password_changed_at timestamp with time zone,
-    _password_history jsonb,
-    firstname text,
-    lastname text,
-    "phoneNb" text,
-    status text
+    _password_history jsonb
 );
 
 
@@ -527,7 +532,7 @@ COPY public."ChatMessage" ("objectId", "createdAt", "updatedAt", _rperm, _wperm,
 -- Data for Name: MedicalData; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."MedicalData" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, datatype, value, patient) FROM stdin;
+COPY public."MedicalData" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, datatype, value, patient, mission_record) FROM stdin;
 \.
 
 
@@ -552,6 +557,17 @@ COPY public."MissionLog" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, 
 --
 
 COPY public."Patient" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, firstname, lastname, home_address, dob, gender, blood_type) FROM stdin;
+\.
+
+
+--
+-- Data for Name: Worker; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Worker" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, user_id, firstname, lastname, "phoneNb", status) FROM stdin;
+y2u2BXLlnK	2021-04-06 11:53:18.225+00	2021-04-06 11:54:05.613+00	\N	\N	vekiIFmtwz	Karen	Smith	03123456	Offline
+uQT12VgmhA	2021-04-06 11:55:36.509+00	2021-04-06 11:55:53.118+00	\N	\N	k5vYFm0Dbd	Joe	Smith	03123456	Offline
+lLDj2PUmaL	2021-04-06 11:54:51.982+00	2021-04-06 12:47:04.199+00	\N	\N	vlUJtBGHW9	Jane	Smith	03123456	Offline
 \.
 
 
@@ -616,22 +632,26 @@ COPY public."_JobStatus" ("objectId", "createdAt", "updatedAt", "jobName", sourc
 --
 
 COPY public."_Join:base_workers:Mission" ("relatedId", "owningId") FROM stdin;
+lLDj2PUmaL	aS05BJvToQ
+lLDj2PUmaL	V7WWpz6iKF
+lLDj2PUmaL	MjF4cNljyw
+lLDj2PUmaL	1Yekhef1UC
+lLDj2PUmaL	l4SapDdBtd
+lLDj2PUmaL	2yiAX2BMth
 \.
 
 
 --
--- Data for Name: _Join:field_responders:Mission; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _Join:field_workers:Mission; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."_Join:field_responders:Mission" ("relatedId", "owningId") FROM stdin;
-\.
-
-
---
--- Data for Name: _Join:mission_record:MedicalData; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."_Join:mission_record:MedicalData" ("relatedId", "owningId") FROM stdin;
+COPY public."_Join:field_workers:Mission" ("relatedId", "owningId") FROM stdin;
+y2u2BXLlnK	aS05BJvToQ
+y2u2BXLlnK	V7WWpz6iKF
+y2u2BXLlnK	MjF4cNljyw
+y2u2BXLlnK	1Yekhef1UC
+y2u2BXLlnK	l4SapDdBtd
+y2u2BXLlnK	2yiAX2BMth
 \.
 
 
@@ -688,12 +708,13 @@ VDYmJhwSss	2021-03-29 14:24:39.544+00	2021-03-29 14:37:43.233+00	field_responder
 COPY public."_SCHEMA" ("className", schema, "isParseClass") FROM stdin;
 _Role	{"fields": {"name": {"type": "String"}, "roles": {"type": "Relation", "targetClass": "_Role"}, "users": {"type": "Relation", "targetClass": "_User"}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}}, "className": "_Role"}	t
 _Session	{"fields": {"user": {"type": "Pointer", "targetClass": "_User"}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "expiresAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "restricted": {"type": "Boolean"}, "createdWith": {"type": "Object"}, "sessionToken": {"type": "String"}, "installationId": {"type": "String"}}, "className": "_Session"}	t
-MedicalData	{"fields": {"ACL": {"type": "ACL"}, "value": {"type": "String", "required": false}, "patient": {"type": "Pointer", "required": false, "targetClass": "Patient"}, "datatype": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "mission_record": {"type": "Relation", "required": false, "targetClass": "Mission"}}, "className": "MedicalData", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
-_User	{"fields": {"email": {"type": "String"}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "status": {"type": "String", "required": false, "defaultValue": "online"}, "phoneNb": {"type": "String", "required": false}, "authData": {"type": "Object"}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "username": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "emailVerified": {"type": "Boolean"}, "_hashed_password": {"type": "String"}}, "className": "_User"}	t
-Mission	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "location": {"type": "GeoPoint", "required": false}, "objectId": {"type": "String"}, "patients": {"type": "Relation", "required": false, "targetClass": "Patient"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "base_workers": {"type": "Relation", "required": false, "targetClass": "_User"}, "field_responders": {"type": "Relation", "required": false, "targetClass": "_User"}}, "className": "Mission", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+MedicalData	{"fields": {"ACL": {"type": "ACL"}, "value": {"type": "String", "required": false}, "patient": {"type": "Pointer", "required": false, "targetClass": "Patient"}, "datatype": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "mission_record": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "MedicalData", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+_User	{"fields": {"ACL": {"type": "ACL"}, "email": {"type": "String"}, "authData": {"type": "Object"}, "objectId": {"type": "String"}, "password": {"type": "String"}, "username": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "emailVerified": {"type": "Boolean"}}, "className": "_User", "classLevelPermissions": {"get": {"*": true}, "find": {"*": true}, "count": {"*": true}, "create": {"*": true}, "delete": {"*": true}, "update": {"*": true}, "addField": {"*": true}, "protectedFields": {"*": []}}}	t
+Mission	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "location": {"type": "GeoPoint", "required": false}, "objectId": {"type": "String"}, "patients": {"type": "Relation", "required": false, "targetClass": "Patient"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "base_workers": {"type": "Relation", "required": false, "targetClass": "Worker"}, "field_workers": {"type": "Relation", "required": false, "targetClass": "Worker"}}, "className": "Mission", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 Patient	{"fields": {"dob": {"type": "Date", "required": false}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "gender": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "blood_type": {"type": "String", "required": false}, "home_address": {"type": "String", "required": false}}, "className": "Patient", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
-MissionLog	{"fields": {"ACL": {"type": "ACL"}, "update": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "related_to_mission": {"type": "Pointer", "required": false, "targetClass": "MissionLog"}}, "className": "MissionLog", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
-ChatMessage	{"fields": {"_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "sender": {"type": "Pointer", "required": false, "targetClass": "_User"}, "message": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "for_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "ChatMessage", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+MissionLog	{"fields": {"ACL": {"type": "ACL"}, "update": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "related_to_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "MissionLog", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+ChatMessage	{"fields": {"ACL": {"type": "ACL"}, "sender": {"type": "Pointer", "required": false, "targetClass": "Worker"}, "message": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "for_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "ChatMessage", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
+Worker	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "phoneNb": {"type": "String", "required": false}, "user_id": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}}, "className": "Worker", "classLevelPermissions": {"get": {"*": true}, "find": {"*": true}, "count": {"*": true}, "create": {"*": true}, "delete": {"*": true}, "update": {"*": true}, "addField": {"*": true}, "protectedFields": {"*": []}}}	t
 \.
 
 
@@ -705,6 +726,8 @@ COPY public."_Session" ("objectId", "createdAt", "updatedAt", restricted, "user"
 bNKjXtEZo2	2021-03-29 14:32:54.613+00	2021-03-29 14:32:54.613+00	f	k5vYFm0Dbd	327118a1-6265-446b-9799-1aef88b6d612	r:ec608b809a5b0ff253788241378760d3	2022-03-29 14:32:54.613+00	{"action": "signup", "authProvider": "password"}	\N	\N
 EPV9jTLYYR	2021-03-29 14:36:40.193+00	2021-03-29 14:36:40.193+00	f	vlUJtBGHW9	327118a1-6265-446b-9799-1aef88b6d612	r:ad0047ba19ddf991dfe52aebb084e9ad	2022-03-29 14:36:40.192+00	{"action": "signup", "authProvider": "password"}	\N	\N
 7w5SZA1X4y	2021-03-29 14:37:43.218+00	2021-03-29 14:37:43.218+00	f	vekiIFmtwz	327118a1-6265-446b-9799-1aef88b6d612	r:63a711413ed696812ce41043351cddfc	2022-03-29 14:37:43.218+00	{"action": "signup", "authProvider": "password"}	\N	\N
+4x1S8oOna6	2021-04-06 12:02:31.517+00	2021-04-06 12:02:31.517+00	f	vlUJtBGHW9	8c0de27b-e126-4686-9021-8c92333f6d17	r:b4087c9204ea8a73bf178834819659c4	2022-04-06 12:02:31.517+00	{"action": "login", "authProvider": "password"}	\N	\N
+H1OIfF8VFi	2021-04-06 12:47:04.289+00	2021-04-06 12:47:04.289+00	f	k5vYFm0Dbd	8c0de27b-e126-4686-9021-8c92333f6d17	r:f3532c2a78eccd4841aec3d360748029	2022-04-06 12:47:04.289+00	{"action": "login", "authProvider": "password"}	\N	\N
 \.
 
 
@@ -712,10 +735,10 @@ EPV9jTLYYR	2021-03-29 14:36:40.193+00	2021-03-29 14:36:40.193+00	f	vlUJtBGHW9	32
 -- Data for Name: _User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."_User" ("objectId", "createdAt", "updatedAt", username, email, "emailVerified", "authData", _rperm, _wperm, _hashed_password, _email_verify_token_expires_at, _email_verify_token, _account_lockout_expires_at, _failed_login_count, _perishable_token, _perishable_token_expires_at, _password_changed_at, _password_history, firstname, lastname, "phoneNb", status) FROM stdin;
-k5vYFm0Dbd	2021-03-29 14:32:54.523+00	2021-03-29 14:33:56.957+00	joesmith.chief	joesmith.chief@gmail.com	t	\N	{*,k5vYFm0Dbd,role:district_chief}	{k5vYFm0Dbd,role:district_chief}	$2b$10$U6fl0IIF3S5fHnbib5yOLuUaOoYeHlQ3vzE9a3bC59aNpKnCZ254.	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-vlUJtBGHW9	2021-03-29 14:36:40.113+00	2021-03-29 14:36:51.325+00	janesmith.base	janesmith.base@gmail.com	t	\N	{*,vlUJtBGHW9}	{vlUJtBGHW9}	$2b$10$J17W6yRQKhzFeM8.cZLjj.9V46Hnbynj5Ccc6aUYTDMxYd6710IfG	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-vekiIFmtwz	2021-03-29 14:37:43.134+00	2021-03-29 14:37:53.259+00	karen.field	karen.field@gmail.com	t	\N	{*,vekiIFmtwz}	{vekiIFmtwz}	$2b$10$vh2dzpDLjRWwSDLMCAiXR.6Ouhqf7yq2NEDX2X5LLNeQGVZBjnOha	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+COPY public."_User" ("objectId", "createdAt", "updatedAt", username, email, "emailVerified", "authData", _rperm, _wperm, _hashed_password, _email_verify_token_expires_at, _email_verify_token, _account_lockout_expires_at, _failed_login_count, _perishable_token, _perishable_token_expires_at, _password_changed_at, _password_history) FROM stdin;
+k5vYFm0Dbd	2021-03-29 14:32:54.523+00	2021-03-29 14:33:56.957+00	joesmith.chief	joesmith.chief@gmail.com	t	\N	{*,k5vYFm0Dbd,role:district_chief}	{k5vYFm0Dbd,role:district_chief}	$2b$10$U6fl0IIF3S5fHnbib5yOLuUaOoYeHlQ3vzE9a3bC59aNpKnCZ254.	\N	\N	\N	\N	\N	\N	\N	\N
+vlUJtBGHW9	2021-03-29 14:36:40.113+00	2021-03-29 14:36:51.325+00	janesmith.base	janesmith.base@gmail.com	t	\N	{*,vlUJtBGHW9}	{vlUJtBGHW9}	$2b$10$J17W6yRQKhzFeM8.cZLjj.9V46Hnbynj5Ccc6aUYTDMxYd6710IfG	\N	\N	\N	\N	\N	\N	\N	\N
+vekiIFmtwz	2021-03-29 14:37:43.134+00	2021-03-29 14:37:53.259+00	karen.field	karen.field@gmail.com	t	\N	{*,vekiIFmtwz}	{vekiIFmtwz}	$2b$10$vh2dzpDLjRWwSDLMCAiXR.6Ouhqf7yq2NEDX2X5LLNeQGVZBjnOha	\N	\N	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -757,6 +780,14 @@ ALTER TABLE ONLY public."Mission"
 
 ALTER TABLE ONLY public."Patient"
     ADD CONSTRAINT "Patient_pkey" PRIMARY KEY ("objectId");
+
+
+--
+-- Name: Worker Worker_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Worker"
+    ADD CONSTRAINT "Worker_pkey" PRIMARY KEY ("objectId");
 
 
 --
@@ -816,19 +847,11 @@ ALTER TABLE ONLY public."_Join:base_workers:Mission"
 
 
 --
--- Name: _Join:field_responders:Mission _Join:field_responders:Mission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: _Join:field_workers:Mission _Join:field_workers:Mission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."_Join:field_responders:Mission"
-    ADD CONSTRAINT "_Join:field_responders:Mission_pkey" PRIMARY KEY ("relatedId", "owningId");
-
-
---
--- Name: _Join:mission_record:MedicalData _Join:mission_record:MedicalData_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."_Join:mission_record:MedicalData"
-    ADD CONSTRAINT "_Join:mission_record:MedicalData_pkey" PRIMARY KEY ("relatedId", "owningId");
+ALTER TABLE ONLY public."_Join:field_workers:Mission"
+    ADD CONSTRAINT "_Join:field_workers:Mission_pkey" PRIMARY KEY ("relatedId", "owningId");
 
 
 --

@@ -227,7 +227,7 @@ CREATE TABLE public."Worker" (
     "phoneNb" text,
     status text,
     image_file text,
-    dob timestamp with time zone
+    distrct text
 );
 
 
@@ -527,6 +527,13 @@ ALTER TABLE public."_User" OWNER TO postgres;
 --
 
 COPY public."ChatMessage" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, message, for_mission, sender) FROM stdin;
+QWXKtU48Lb	2021-04-26 14:12:49.446+00	2021-04-26 14:29:24.605+00	\N	\N	Just arrived. We see the patient. They are bleeding profusely	j8qruAaqh3	y2u2BXLlnK
+vMVK3ZEMyh	2021-04-26 14:11:28.874+00	2021-04-26 14:29:45.521+00	\N	\N	Hi. Arriving Soon	j8qruAaqh3	y2u2BXLlnK
+zLVPJufPCx	2021-04-26 14:12:10.794+00	2021-04-26 14:29:59.24+00	\N	\N	Great. Keep me posted	j8qruAaqh3	lLDj2PUmaL
+N7t38zf92Y	2021-04-26 14:13:34.868+00	2021-04-26 14:30:17.306+00	\N	\N	Disinfected and bandaged all visible wounds. Whats next?	j8qruAaqh3	y2u2BXLlnK
+jF2ufrBKRx	2021-04-26 14:14:48.765+00	2021-04-26 14:30:28.656+00	\N	\N	Get patient ready for transport I am looking for the closest hospital	j8qruAaqh3	lLDj2PUmaL
+EXEOIFCyvr	2021-04-26 14:15:22.392+00	2021-04-26 14:30:40.933+00	\N	\N	The nearest hospital is LAUMC	j8qruAaqh3	lLDj2PUmaL
+2vla0BslKt	2021-04-26 14:15:49.466+00	2021-04-26 14:30:51.129+00	\N	\N	Just arrived at hospital. Patient taken by staff	j8qruAaqh3	y2u2BXLlnK
 \.
 
 
@@ -543,6 +550,8 @@ COPY public."MedicalData" ("objectId", "createdAt", "updatedAt", _rperm, _wperm,
 --
 
 COPY public."Mission" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, location, status) FROM stdin;
+j8qruAaqh3	2021-04-26 13:10:43.522+00	2021-04-26 13:12:40.737+00	\N	\N	\N	complete
+ngcWMpo1U7	2021-04-27 08:20:15.537+00	2021-04-27 08:31:31.336+00	\N	\N	\N	complete
 \.
 
 
@@ -559,6 +568,9 @@ COPY public."MissionLog" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, 
 --
 
 COPY public."Patient" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, firstname, lastname, home_address, dob, gender, blood_type) FROM stdin;
+KnfbIlJNoo	2021-04-24 12:16:22.435+00	2021-04-24 12:16:22.435+00	\N	\N	John	Smith	Byblos	1960-12-24 22:00:00+00	Female	A-
+DoKRHmaMxr	2021-04-24 12:18:18.738+00	2021-04-24 12:18:18.738+00	\N	\N	John	Smith	Byblos	1960-12-24 22:00:00+00	Female	A-
+D9FPJwGZON	2021-04-24 12:26:25.191+00	2021-04-24 12:26:25.191+00	\N	\N	John	Smith	Byblos	1960-12-24 22:00:00+00	Female	A-
 \.
 
 
@@ -566,10 +578,12 @@ COPY public."Patient" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, fir
 -- Data for Name: Worker; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."Worker" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, user_id, firstname, lastname, "phoneNb", status, image_file, dob) FROM stdin;
-y2u2BXLlnK	2021-04-06 11:53:18.225+00	2021-04-08 14:26:02.65+00	\N	\N	vekiIFmtwz	Karen	Smith	03123456	online	d0fe00aa669b476f716eda4059128a46_random-pic-6.jpg	1998-04-08 14:15:18.763+00
-lLDj2PUmaL	2021-04-06 11:54:51.982+00	2021-04-08 14:46:47.602+00	\N	\N	vlUJtBGHW9	Jane	Smith	03123456	offline	a2b7715a587f33f2f473e77e4a2e0c2e_random-pic-7.jpg	1999-04-08 14:14:31.678+00
-uQT12VgmhA	2021-04-06 11:55:36.509+00	2021-04-08 14:50:41.282+00	\N	\N	k5vYFm0Dbd	Joe	Smith	03123456	offline	48019f2e07fe0e09a8a84e3d9479ac28_random-pic-1.jpg	2000-04-08 14:14:00+00
+COPY public."Worker" ("objectId", "createdAt", "updatedAt", _rperm, _wperm, user_id, firstname, lastname, "phoneNb", status, image_file, distrct) FROM stdin;
+GLRC4Dz1ws	2021-04-24 12:27:55.48+00	2021-04-27 08:54:20.176+00	\N	\N	L1SIutW5FQ	Carol	Smith	01234567	offline	e22d66d6ff32c55cc38e392743de2f3f_carolsmith.field.png	Beirut
+uQT12VgmhA	2021-04-06 11:55:36.509+00	2021-04-27 08:54:24.217+00	\N	\N	k5vYFm0Dbd	Joe	Smith	03123456	offline	48019f2e07fe0e09a8a84e3d9479ac28_random-pic-1.jpg	Byblos
+y2u2BXLlnK	2021-04-06 11:53:18.225+00	2021-04-27 08:54:28.31+00	\N	\N	vekiIFmtwz	Karen	Smith	03123456	offline	d0fe00aa669b476f716eda4059128a46_random-pic-6.jpg	Byblos
+lLDj2PUmaL	2021-04-06 11:54:51.982+00	2021-04-27 09:08:18.164+00	\N	\N	vlUJtBGHW9	Jane	Smith	03123456	offline	a2b7715a587f33f2f473e77e4a2e0c2e_random-pic-7.jpg	Byblos
+aNfHksYhDy	2021-04-24 12:56:41.673+00	2021-04-28 09:50:25.988+00	\N	\N	4I2fKctNRI	Picanto	Smith	03123456	offline	b0e23b52121fc910ab8512c513a4c06b_picantosmith.base.png	Beirut
 \.
 
 
@@ -640,6 +654,11 @@ lLDj2PUmaL	MjF4cNljyw
 lLDj2PUmaL	1Yekhef1UC
 lLDj2PUmaL	l4SapDdBtd
 lLDj2PUmaL	2yiAX2BMth
+lLDj2PUmaL	ASCbPHsN7x
+lLDj2PUmaL	ahFFwltqIb
+lLDj2PUmaL	Y9QsPhyvII
+lLDj2PUmaL	j8qruAaqh3
+lLDj2PUmaL	ngcWMpo1U7
 \.
 
 
@@ -654,6 +673,10 @@ y2u2BXLlnK	MjF4cNljyw
 y2u2BXLlnK	1Yekhef1UC
 y2u2BXLlnK	l4SapDdBtd
 y2u2BXLlnK	2yiAX2BMth
+y2u2BXLlnK	ASCbPHsN7x
+y2u2BXLlnK	ahFFwltqIb
+y2u2BXLlnK	Y9QsPhyvII
+y2u2BXLlnK	j8qruAaqh3
 \.
 
 
@@ -662,6 +685,8 @@ y2u2BXLlnK	2yiAX2BMth
 --
 
 COPY public."_Join:patients:Mission" ("relatedId", "owningId") FROM stdin;
+D9FPJwGZON	j8qruAaqh3
+D9FPJwGZON	ngcWMpo1U7
 \.
 
 
@@ -681,6 +706,8 @@ COPY public."_Join:users:_Role" ("relatedId", "owningId") FROM stdin;
 k5vYFm0Dbd	R92PAg71tf
 vlUJtBGHW9	KFNZkyJZHC
 vekiIFmtwz	VDYmJhwSss
+L1SIutW5FQ	VDYmJhwSss
+4I2fKctNRI	KFNZkyJZHC
 \.
 
 
@@ -698,8 +725,8 @@ COPY public."_PushStatus" ("objectId", "createdAt", "updatedAt", "pushTime", sou
 
 COPY public."_Role" ("objectId", "createdAt", "updatedAt", name, _rperm, _wperm) FROM stdin;
 R92PAg71tf	2021-03-29 14:23:39.568+00	2021-03-29 14:35:12.203+00	district_chief	{*,role:district_chief}	{*,role:district_chief}
-KFNZkyJZHC	2021-03-29 14:24:18.304+00	2021-03-29 14:36:40.209+00	base_worker	{*,role:base_worker}	{*,role:base_worker}
-VDYmJhwSss	2021-03-29 14:24:39.544+00	2021-03-29 14:37:43.233+00	field_responder	{*,role:field_responder}	{*,role:field_responder}
+VDYmJhwSss	2021-03-29 14:24:39.544+00	2021-04-24 12:27:55.381+00	field_responder	{*,role:field_responder}	{*,role:field_responder}
+KFNZkyJZHC	2021-03-29 14:24:18.304+00	2021-04-24 12:56:41.55+00	base_worker	{*,role:base_worker}	{*,role:base_worker}
 \.
 
 
@@ -716,7 +743,7 @@ Mission	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "requir
 Patient	{"fields": {"dob": {"type": "Date", "required": false}, "_rperm": {"type": "Array", "contents": {"type": "String"}}, "_wperm": {"type": "Array", "contents": {"type": "String"}}, "gender": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "blood_type": {"type": "String", "required": false}, "home_address": {"type": "String", "required": false}}, "className": "Patient", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 MissionLog	{"fields": {"ACL": {"type": "ACL"}, "update": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "related_to_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "MissionLog", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
 ChatMessage	{"fields": {"ACL": {"type": "ACL"}, "sender": {"type": "Pointer", "required": false, "targetClass": "Worker"}, "message": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "updatedAt": {"type": "Date"}, "for_mission": {"type": "Pointer", "required": false, "targetClass": "Mission"}}, "className": "ChatMessage", "classLevelPermissions": {"get": {"requiresAuthentication": true}, "find": {"requiresAuthentication": true}, "count": {"requiresAuthentication": true}, "create": {"requiresAuthentication": true}, "delete": {"requiresAuthentication": true}, "update": {"requiresAuthentication": true}, "addField": {"requiresAuthentication": true}, "protectedFields": {"*": []}}}	t
-Worker	{"fields": {"ACL": {"type": "ACL"}, "dob": {"type": "Date", "required": false}, "status": {"type": "String", "required": false}, "phoneNb": {"type": "String", "required": false}, "user_id": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "image_file": {"type": "File", "required": false}}, "className": "Worker", "classLevelPermissions": {"get": {"*": true}, "find": {"*": true}, "count": {"*": true}, "create": {"*": true}, "delete": {"*": true}, "update": {"*": true}, "addField": {"*": true}, "protectedFields": {"*": []}}}	t
+Worker	{"fields": {"ACL": {"type": "ACL"}, "status": {"type": "String", "required": false}, "distrct": {"type": "String", "required": false}, "phoneNb": {"type": "String", "required": false}, "user_id": {"type": "String", "required": false}, "lastname": {"type": "String", "required": false}, "objectId": {"type": "String"}, "createdAt": {"type": "Date"}, "firstname": {"type": "String", "required": false}, "updatedAt": {"type": "Date"}, "image_file": {"type": "File", "required": false}}, "className": "Worker", "classLevelPermissions": {"get": {"*": true}, "find": {"*": true}, "count": {"*": true}, "create": {"*": true}, "delete": {"*": true}, "update": {"*": true}, "addField": {"*": true}, "protectedFields": {"*": []}}}	t
 \.
 
 
@@ -728,7 +755,6 @@ COPY public."_Session" ("objectId", "createdAt", "updatedAt", restricted, "user"
 bNKjXtEZo2	2021-03-29 14:32:54.613+00	2021-03-29 14:32:54.613+00	f	k5vYFm0Dbd	327118a1-6265-446b-9799-1aef88b6d612	r:ec608b809a5b0ff253788241378760d3	2022-03-29 14:32:54.613+00	{"action": "signup", "authProvider": "password"}	\N	\N
 EPV9jTLYYR	2021-03-29 14:36:40.193+00	2021-03-29 14:36:40.193+00	f	vlUJtBGHW9	327118a1-6265-446b-9799-1aef88b6d612	r:ad0047ba19ddf991dfe52aebb084e9ad	2022-03-29 14:36:40.192+00	{"action": "signup", "authProvider": "password"}	\N	\N
 7w5SZA1X4y	2021-03-29 14:37:43.218+00	2021-03-29 14:37:43.218+00	f	vekiIFmtwz	327118a1-6265-446b-9799-1aef88b6d612	r:63a711413ed696812ce41043351cddfc	2022-03-29 14:37:43.218+00	{"action": "signup", "authProvider": "password"}	\N	\N
-9bwXDPELUp	2021-04-08 14:26:02.614+00	2021-04-08 14:26:02.614+00	f	vekiIFmtwz	8c0de27b-e126-4686-9021-8c92333f6d17	r:9c429da25f4d613ab928f0e1f89ac97d	2022-04-08 14:26:02.614+00	{"action": "login", "authProvider": "password"}	\N	\N
 \.
 
 
@@ -740,6 +766,8 @@ COPY public."_User" ("objectId", "createdAt", "updatedAt", username, email, "ema
 k5vYFm0Dbd	2021-03-29 14:32:54.523+00	2021-03-29 14:33:56.957+00	joesmith.chief	joesmith.chief@gmail.com	t	\N	{*,k5vYFm0Dbd,role:district_chief}	{k5vYFm0Dbd,role:district_chief}	$2b$10$U6fl0IIF3S5fHnbib5yOLuUaOoYeHlQ3vzE9a3bC59aNpKnCZ254.	\N	\N	\N	\N	\N	\N	\N	\N
 vlUJtBGHW9	2021-03-29 14:36:40.113+00	2021-03-29 14:36:51.325+00	janesmith.base	janesmith.base@gmail.com	t	\N	{*,vlUJtBGHW9}	{vlUJtBGHW9}	$2b$10$J17W6yRQKhzFeM8.cZLjj.9V46Hnbynj5Ccc6aUYTDMxYd6710IfG	\N	\N	\N	\N	\N	\N	\N	\N
 vekiIFmtwz	2021-03-29 14:37:43.134+00	2021-03-29 14:37:53.259+00	karen.field	karen.field@gmail.com	t	\N	{*,vekiIFmtwz}	{vekiIFmtwz}	$2b$10$vh2dzpDLjRWwSDLMCAiXR.6Ouhqf7yq2NEDX2X5LLNeQGVZBjnOha	\N	\N	\N	\N	\N	\N	\N	\N
+L1SIutW5FQ	2021-04-24 12:27:55.279+00	2021-04-24 12:27:55.279+00	carolsmith.field	carol.smith@gmail.com	\N	\N	{*,L1SIutW5FQ}	{L1SIutW5FQ}	$2b$10$QiDxR.po/g1hU1cw3UNuyeSB8dQeiowyc0borgm9eq/Y.HXaE.vH2	\N	\N	\N	\N	\N	\N	\N	\N
+4I2fKctNRI	2021-04-24 12:56:41.456+00	2021-04-24 12:56:41.456+00	picantosmith.base	p@gmail.com	\N	\N	{*,4I2fKctNRI}	{4I2fKctNRI}	$2b$10$654njbBISs156LNyoSmaK.uJON98PSDHexhA/LaY1kRTs1WCQ33tK	\N	\N	\N	\N	\N	\N	\N	\N
 \.
 
 

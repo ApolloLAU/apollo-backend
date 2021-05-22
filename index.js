@@ -25,7 +25,7 @@ const config = {
   masterKey: process.env.MASTER_KEY || 'frsMasterKey', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
   liveQuery: {
-    classNames: ['Mission', 'MissionLog', 'MedicalData', 'ChatMessage', 'Patient'], // List of classes to support for query subscriptions
+    classNames: ['Worker', 'Mission', 'MissionLog', 'MedicalData', 'ChatMessage', 'Patient'], // List of classes to support for query subscriptions
   },
   filesAdapter: fsAdapter,
 };

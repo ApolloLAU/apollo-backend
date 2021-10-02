@@ -1,14 +1,14 @@
-FROM node:latest
+FROM node:14
 
 RUN mkdir parse
 
 ADD . /parse
 WORKDIR /parse
-RUN npm install
+RUN npm install -ddd --verbose
 
-ENV APP_ID setYourAppId
-ENV MASTER_KEY setYourMasterKey
-ENV DATABASE_URI setMongoDBURI
+ENV APP_ID frsAppID
+ENV MASTER_KEY frsMasterKey
+ENV DATABASE_URI postgres://postgres:password@postgres:5432/frs
 
 # Optional (default : 'parse/cloud/main.js')
 # ENV CLOUD_CODE_MAIN cloudCodePath

@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  frs-backend:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      - APP_ID=frsAppID
+      - MASTER_KEY=frsMasterKey
+      - SERVER_URL=http://localhost:1337/parse
+    ports:
+    - "1337:1337"
+    tty: true
+
+  postgres:
+    image: postgis/postgis
+    volumes:
+      - ./SQLDUMP.sql:/docker-entrypoint-initdb.d/1-setup.sql
+      - database-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=initialDB
+    ports:
+    - "5432:5432"
+
+volumes:
+  database-data:
+
+
+

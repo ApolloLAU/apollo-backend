@@ -44,7 +44,12 @@ const dashboard = new ParseDashboard({
       appName: 'FRS Backend',
     },
   ],
-});
+    users: [{
+      user: "admin",
+      pass: "admin",
+      apps:[{appId:"frsAppID"}]
+    }],
+}, {allowInsecureHTTP: true});
 
 // Serve static assets from the /public folder
 app.use('/public', express.static(path.join(__dirname, '/public')));

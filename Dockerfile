@@ -8,7 +8,6 @@ RUN npm install -ddd --verbose
 
 ENV APP_ID frsAppID
 ENV MASTER_KEY frsMasterKey
-ENV DATABASE_URI postgres://postgres:password@postgres:5432/frs
 
 # Optional (default : 'parse/cloud/main.js')
 # ENV CLOUD_CODE_MAIN cloudCodePath

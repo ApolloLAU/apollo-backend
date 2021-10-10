@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  frs-backend:
+  apollo-backend:
     build: .
     depends_on:
       - mongo
@@ -9,6 +9,7 @@ services:
       - APP_ID=frsAppID
       - MASTER_KEY=frsMasterKey
       - SERVER_URL=http://localhost:1337/parse
+      - DATABASE_URI=mongodb://root:example@mongo:27017
     ports:
     - "1337:1337"
     tty: true
@@ -19,7 +20,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
       - database-data:/data/db
 

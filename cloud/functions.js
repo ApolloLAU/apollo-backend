@@ -9,13 +9,13 @@ Parse.Cloud.define('asyncFunction', async req => {
   return 'Hi async';
 });
 
-Parse.Cloud.job('deleteAll', req => {
-  console.log("RECEIVED DELETE JOB!");
+// Parse.Cloud.job('deleteAll', req => {
+//   console.log("RECEIVED DELETE JOB!");
 
-  var Schema = Parse.Object.extend("_SCHEMA");
-  var query = new Parse.Query(Schema);
+//   var Schema = Parse.Object.extend("_SCHEMA");
+//   var query = new Parse.Query(Schema);
 
-})
+// })
 
 Parse.Cloud.beforeSave('Test', () => {
   throw new Parse.Error(9001, 'Saving test objects is not available.');

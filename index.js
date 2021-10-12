@@ -6,7 +6,6 @@
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const ParseDashboard = require('parse-dashboard');
-var FSFilesAdapter = require('@parse/fs-files-adapter');
 const path = require('path');
 const args = process.argv || [];
 const test = args.some(arg => arg.includes('jasmine'));
@@ -16,7 +15,6 @@ const databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.');
 }
-var fsAdapter = new FSFilesAdapter({});
 
 const config = {
   databaseURI: databaseUri || 'mongodb://root:exampl@localhost:27017',
@@ -44,11 +42,11 @@ const dashboard = new ParseDashboard({
       appName: 'FRS Backend',
     },
   ],
-    users: [{
-      user: "admin",
-      pass: "admin",
-      apps:[{appId:"frsAppID"}]
-    }],
+  users: [{
+    user: "admin",
+    pass: "admin",
+    apps:[{appId:"frsAppID"}]
+  }],
 }, {allowInsecureHTTP: true});
 
 // Serve static assets from the /public folder

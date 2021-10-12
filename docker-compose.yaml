@@ -2,7 +2,7 @@ version: '3'
 
 services:
   apollo-backend:
-    build: .
+    image: ghcr.io/apollolau/apollo-backend:master
     depends_on:
       - mongo
     environment:

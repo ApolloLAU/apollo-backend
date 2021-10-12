@@ -13,7 +13,7 @@
     "kerberos": "1.1.4",
     "parse": "2.19.0",
     "parse-dashboard": "^2.1.0",
-    "parse-server": "parse-community/parse-server"
+    "parse-server": "ApolloLAU/parse-server"
   },
   "scripts": {
     "start": "node index.js",

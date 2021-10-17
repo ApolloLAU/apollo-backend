@@ -13,6 +13,8 @@ services:
     ports:
     - "1337:1337"
     tty: true
+    volumes:
+      - ./cloud:/parse/cloud
 
   mongo:
     image: mongo

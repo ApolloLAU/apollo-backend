@@ -17,13 +17,12 @@ Parse.Cloud.define('asyncFunction', async req => {
 
 // })
 
-Parse.Cloud.job('getActiveMissions', req => {
-  const pipeline = [{ match: { base_workers: { size: 0 } } }];
+Parse.Cloud.define('getActiveMissions', req => {
+  const pipeline = [{ $match: { base_workers: { $size: 0 } } }];
   return new Parse.Query('Mission')
     .equalTo('status', 'active')
-    .aggregate(pipeline)
     .includeAll()
-    .find();
+    .aggregate(pipeline);
 })
 
 Parse.Cloud.beforeSave('Test', () => {

@@ -20,7 +20,7 @@ Parse.Cloud.define('asyncFunction', async req => {
 Parse.Cloud.define('getActiveMissions', req => {
   const pipeline = [{ $match: { base_workers: { $size: 0 } } }];
   return new Parse.Query('Mission')
-    .equalTo('status', 'active')
+    .equalTo('status', 'deployable')
     .includeAll()
     .aggregate(pipeline);
 })

@@ -36,16 +36,16 @@ const app = express();
 const dashboard = new ParseDashboard({
   apps: [
     {
-      serverURL: 'http://localhost:1337/parse',
-      appId: 'frsAppID',
-      masterKey: 'frsMasterKey',
-      appName: 'FRS Backend',
+      serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',
+      appId: process.env.APP_ID || 'frsAppID',
+      masterKey: process.env.MASTER_KEY || 'frsMasterKey',
+      appName: 'Apollo Backend',
     },
   ],
   users: [{
     user: "admin",
     pass: "admin",
-    apps:[{appId:"frsAppID"}]
+    apps:[{appId:process.env.APP_ID || 'frsAppID'}]
   }],
 }, {allowInsecureHTTP: true});
 

@@ -1,0 +1,18 @@
+###
+
+# curl -X POST
+#  -H "X-Parse-Application-Id: ${APPLICATION_ID}"
+#  -H "X-Parse-REST-API-Key: ${REST_API_KEY}"
+#  -H "Content-Type: application/json"
+#  -d '{ "movie": "The Matrix" }'
+#  https://YOUR.PARSE-SERVER.HERE/parse/functions/averageStars
+POST http://localhost:1337/parse/functions/getActiveMissions
+X-Parse-Application-Id: frsAppID
+Content-Type: application/json
+
+{
+  "movie": "The Matrix"
+}
+
+###
+

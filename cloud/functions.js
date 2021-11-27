@@ -1,3 +1,6 @@
+const {all} = require("eslint-plugin-promise/rules/lib/promise-statics");
+const axios = require('axios').default;
+
 Parse.Cloud.define('hello', req => {
   req.log.info(req);
   return 'Hi';
@@ -23,6 +26,37 @@ Parse.Cloud.define('getActiveMissions', req => {
     .equalTo('status', 'deployable')
     .includeAll()
     .aggregate(pipeline);
+})
+//
+// Parse.Cloud.define('preprocessECG', async (req) => {
+//   const values = req.params.ecg;
+//
+// });
+
+Parse.Cloud.beforeSave('SensorData', async (request) => {
+  const obj = request.object;
+  const all_data = obj.get('ECG');
+  const new_data = obj.get('raw_ECG');
+  const req_url = process.env.ML_API_URL + '/clean_ecg'
+
+  const request_obj = {ECG: new_data}
+
+  const response = await axios.post(req_url, request_obj).catch((err) => {
+    console.log('could not process ecg')
+    console.log(err);
+  })
+  // response contains array with same length as input and new last index.
+
+  // overwrite all data array with the cleaned data.
+  //
+  // Array.prototype.splice.apply(all_data, [last_index + 1, response.clean_data.length].concat(response.clean_data))
+  all_data.push(response.clean_data)
+  request.object.set('ECG', all_data);
+  const current_bpm = request.object.get('bpm');
+  current_bpm.push(response.bpm);
+  request.object.set('bpm', current_bpm);
+
+
 })
 
 Parse.Cloud.beforeSave('Test', () => {

@@ -51,13 +51,14 @@ Parse.Cloud.beforeSave('SensorData', async (request) => {
   // Array.prototype.splice.apply(all_data, [last_index + 1, response.clean_data.length].concat(response.clean_data))
   console.log('Cleaned ECG. Response is:', response)
   const response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
-  all_data.push(...response_object.data.clean_ecg)
-  request.object.set('ECG', all_data);
-  const current_bpm = request.object.get('bpm');
-  current_bpm.push(response_object.data.bpm);
-  request.object.set('bpm', current_bpm);
-  request.object.set('raw_ECG', []);
-
+  if (response_object.statusCode === 200) {
+    all_data.push(...response_object.data.clean_ecg)
+    request.object.set('ECG', all_data);
+    const current_bpm = request.object.get('bpm');
+    current_bpm.push(response_object.data.bpm);
+    request.object.set('bpm', current_bpm);
+    request.object.set('raw_ECG', []);
+  }
 })
 
 Parse.Cloud.beforeSave('Test', () => {

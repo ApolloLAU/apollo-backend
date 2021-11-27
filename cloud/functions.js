@@ -37,7 +37,7 @@ Parse.Cloud.beforeSave('SensorData', async (request) => {
   const obj = request.object;
   const all_data = obj.get('ECG');
   const new_data = obj.get('raw_ECG');
-  const req_url = process.env.ML_API_URL + '/clean_ecg'
+  const req_url = process.env.ML_API_URL + '/preprocess_ecg'
 
   const request_obj = {ECG: new_data}
 

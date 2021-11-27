@@ -50,7 +50,7 @@ Parse.Cloud.beforeSave('SensorData', async (request) => {
   // overwrite all data array with the cleaned data.
   //
   // Array.prototype.splice.apply(all_data, [last_index + 1, response.clean_data.length].concat(response.clean_data))
-  all_data.push(response.clean_data)
+  all_data.push(response.clean_ecg)
   request.object.set('ECG', all_data);
   const current_bpm = request.object.get('bpm');
   current_bpm.push(response.bpm);

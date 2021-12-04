@@ -75,7 +75,7 @@ Parse.Cloud.define('predict', async (req) => {
         const nbr_of_intervals = Math.floor(clean_ecg.length / samples_per_req);
         const index = Math.floor(Math.random() * nbr_of_intervals);
         const ecg_values = clean_ecg.slice(index, index + samples_per_req);
-        const bpm_val = bpm.at(-1);
+        const bpm_val = bpm.length > 0 ? bpm[bpm.length - 1] : -1;
 
         const patient = ecg.get('patient')
         const year = patient.get('dob').getYear();

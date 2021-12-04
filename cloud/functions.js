@@ -73,7 +73,7 @@ Parse.Cloud.define('predict', async (req) => {
       if (clean_ecg && bpm && bpm.length > 0 && clean_ecg.length > (samples_per_req * 5)) {
 
         const nbr_of_intervals = Math.floor(clean_ecg.length / samples_per_req);
-        const index = Math.floor(Math.random() * nbr_of_intervals);
+        const index = nbr_of_intervals - 1;
         const ecg_values = clean_ecg.slice(index, index + samples_per_req);
         const bpm_val = bpm.length > 0 ? bpm[bpm.length - 1] : -1;
 
@@ -89,7 +89,7 @@ Parse.Cloud.define('predict', async (req) => {
           console.log(err);
         })
         console.log('got response from ml:', response)
-        const response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
+        const response_object = response.data
         if (response_object.statusCode === 200) {
           const pred1 = response_object.data.bpm_prediction;
           const pred2 = response_object.data.ecg_prediction;

@@ -61,6 +61,50 @@ Parse.Cloud.beforeSave('SensorData', async (request) => {
   }
 })
 
+Parse.Cloud.define('predict', async (req) => {
+  try {
+    const samples_per_req = 141;
+    const ecgId = req.params.ecg;
+    const ecg = await (new Parse.Query("SensorData").equalTo("objectId", ecgId).include('patient').first())
+
+    if (ecg) {
+      const clean_ecg = ecg.get('ECG')
+      const bpm = ecg.get('bpm')
+      if (clean_ecg && bpm && bpm.length > 0 && clean_ecg.length > (samples_per_req * 5)) {
+        const nbr_of_intervals = Math.floor(clean_ecg.length / samples_per_req);
+        const index = Math.floor(Math.random() * nbr_of_intervals);
+        const ecg_values = clean_ecg.slice(index, index + samples_per_req);
+        const bpm_val = bpm[-1];
+
+        const patient = ecg.get('patient')
+        const year = patient.get('dob').getYear();
+        const abnormalities = patient.get('prevConditions');
+
+        const request_obj = {ECG: ecg_values, yearOfBirth: year, prevHeartCond: abnormalities, BPM: bpm_val}
+        const req_url = process.env.ML_API_URL + '/predict_ecg'
+
+        const response = await axios.post(req_url, request_obj).catch((err) => {
+          console.log('could not process ecg')
+          console.log(err);
+        })
+
+        const response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
+        if (response_object.statusCode === 200) {
+          const pred1 = response_object.data.bpm_prediction;
+          const pred2 = response_object.data.ecg_prediction;
+
+          ecg.set('predicted_diseases', [pred1, pred2])
+          await ecg.save()
+          return true
+        }
+      }
+    }
+  } catch (e) {
+    console.log('error while predicting:', e)
+  }
+  return false;
+})
+
 Parse.Cloud.beforeSave('Test', () => {
   throw new Parse.Error(9001, 'Saving test objects is not available.');
 });

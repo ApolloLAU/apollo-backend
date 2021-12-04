@@ -88,7 +88,7 @@ Parse.Cloud.define('predict', async (req) => {
           console.log('could not process ecg')
           console.log(err);
         })
-
+        console.log('got response from ml:', response)
         const response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
         if (response_object.statusCode === 200) {
           const pred1 = response_object.data.bpm_prediction;

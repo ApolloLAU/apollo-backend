@@ -50,8 +50,15 @@ Parse.Cloud.beforeSave('SensorData', async (request) => {
 
     // overwrite all data array with the cleaned data.
     // Array.prototype.splice.apply(all_data, [last_index + 1, response.clean_data.length].concat(response.clean_data))
-    console.log('Cleaned ECG. Response is:', response.data)
-    const response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
+    let response_object = {}
+    if (typeof response.data === "string") {
+      console.log('Cleaned ECG. Response is:', response.data)
+      response_object = JSON.parse(response.data.replace(/\bNaN\b/g, -1))
+    } else {
+      response_object = response.data
+    }
+
+
     if (response_object.statusCode === 200) {
       all_data.push(...response_object.data.clean_ecg)
       request.object.set('ECG', all_data);
